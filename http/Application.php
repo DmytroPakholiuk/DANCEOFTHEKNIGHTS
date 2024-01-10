@@ -7,6 +7,7 @@ class Application
 
     public function run()
     {
-        echo "Hello";
+        $router = new Router();
+        $router->executeAction();
     }
 }
