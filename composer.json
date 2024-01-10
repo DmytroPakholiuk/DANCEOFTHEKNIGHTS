@@ -1,0 +1,21 @@
+{
+    "name": "vendor_name/danceoftheknights",
+    "description": "description",
+    "minimum-stability": "stable",
+    "license": "proprietary",
+    "authors": [
+        {
+            "name": "dima",
+            "email": "email@example.com"
+        }
+    ],
+    "require": {
+
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^10",
+        "codeception/codeception": "*",
+        "codeception/module-phpbrowser": "*",
+        "codeception/module-asserts": "*"
+    }
+}

@@ -1,0 +1,52 @@
+version: '3.2'
+
+networks:
+  dance_of_the_knights_network:
+    external: true
+
+services:
+
+  nginx:
+    container_name: dance_of_the_knights_nginx
+    image: nginx:latest
+    ports:
+      - 30080:80
+    volumes:
+      - .:/var/www/dance_of_the_knights
+      - ./docker/nginx/dance_of_the_knights.conf:/etc/nginx/conf.d/dance_of_the_knights.conf
+    depends_on:
+      - php
+    networks:
+      dance_of_the_knights_network:
+        ipv4_address: 175.10.20.3
+
+  php:
+    #    image: php:8.1-fpm
+    container_name: dance_of_the_knights_php
+    ports:
+      - 39000:9000
+    build:
+      context: ./docker/php
+    volumes:
+      - .:/var/www/dance_of_the_knights
+    working_dir: /var/www/dance_of_the_knights
+    networks:
+      dance_of_the_knights_network:
+        ipv4_address: 175.10.20.4
+
+  redis:
+    container_name: dance_of_the_knights_redis
+    image: redis:latest
+    #    restart: always
+    ports:
+      - 36379:6379
+    volumes:
+      #      - /path/to/local/dаta:/root/redis
+      - ./docker/redis/redis.conf:/usr/local/etc/redis/redis.conf
+    environment:
+      - REDIS_PASSWORD=
+      - REDIS_PORT=6379
+      - REDIS_DATABASES=16
+    networks:
+      dance_of_the_knights_network:
+        ipv4_address: 175.10.20.5
