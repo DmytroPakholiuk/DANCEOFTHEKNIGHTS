@@ -7,12 +7,38 @@ use exceptions\NotFoundException;
 
 abstract class StringMessage extends RedisMessage
 {
+    public function validateFilled(): bool
+    {
+        $errors = [];
+        foreach ($this->fields() as $field){
+            if (!isset($this->$field)){
+                $errors[] = " Field $field of " . static::class . " should not be empty \n ";
+            }
+        }
+        if (!empty($errors)){
+            throw new \AssertionError(implode($errors));
+        }
+        return true;
+    }
+
+    /**
+     * It has to return an array of strings which indicates the props that are fields that have to be filled
+     * @return string[]
+     */
+    protected function fields(): array
+    {
+        return [
+            "id",
+            "class"
+        ];
+    }
+
     /**
      * @throws \ReflectionException
      * @throws NotFoundException
      * @throws \RedisException
      */
-    public static function getModel(string $id): RedisMessage|null
+    public static function getModel(string $id): StringMessage|null
     {
         $fullId = static::prefix() . $id;
         $redis = RedisProvider::getInstance()->getRedis();
@@ -33,7 +59,7 @@ abstract class StringMessage extends RedisMessage
     public function saveModel()
     {
         $fullId = $this->getFullId();
-        if ($fullId === null) {
+        if (! $this->validateFilled()) {
             return false;
         }
 
