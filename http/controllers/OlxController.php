@@ -2,11 +2,16 @@
 
 namespace http\controllers;
 
+use models\Email;
+
 class OlxController extends Controller
 {
     public function actionTest()
     {
-        echo "asdsaddad";
+        $model = new Email();
+        $model->active = false;
+        $model->saveModel();
+        var_dump(Email::getModel("kkk"));
     }
 
     public function actionIndex()

@@ -28,7 +28,7 @@ class Router
         try {
             $this->controller = $this->generateController();
             $this->triggerAction();
-        } catch (\Throwable $exception) {
+        } catch (NotFoundException $exception) {
             echo "404";
         }
     }
