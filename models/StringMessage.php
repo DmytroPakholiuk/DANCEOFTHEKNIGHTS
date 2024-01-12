@@ -38,7 +38,7 @@ abstract class StringMessage extends RedisMessage
      * @throws NotFoundException
      * @throws \RedisException
      */
-    public static function getModel(string $id): StringMessage|null
+    public static function getModel(string $id): static|null
     {
         $fullId = static::prefix() . $id;
         $redis = RedisProvider::getInstance()->getRedis();

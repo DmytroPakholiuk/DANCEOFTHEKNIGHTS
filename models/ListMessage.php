@@ -21,7 +21,7 @@ abstract class ListMessage extends RedisMessage
      * @throws \RedisException
      * @throws \ReflectionException
      */
-    public static function getModel(string $id): ListMessage|null
+    public static function getModel(string $id): static|null
     {
         $fullId = static::prefix() . $id;
         $redis = RedisProvider::getInstance()->getRedis();
