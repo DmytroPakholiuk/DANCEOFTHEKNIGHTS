@@ -35,7 +35,6 @@ abstract class StringMessage extends RedisMessage
 
     /**
      * @throws \ReflectionException
-     * @throws NotFoundException
      * @throws \RedisException
      */
     public static function getModel(string $id): static|null
@@ -45,6 +44,7 @@ abstract class StringMessage extends RedisMessage
         $modelDataJson = $redis->get($fullId);
         $modelDataStdClass = json_decode($modelDataJson);
         if (empty($modelDataStdClass)){
+            return null;
             throw new NotFoundException("This model was not found in database");
         }
 

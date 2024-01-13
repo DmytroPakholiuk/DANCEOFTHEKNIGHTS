@@ -23,6 +23,11 @@ class Email extends StringMessage
         return "email_";
     }
 
+    public function generateConfirmationKey(): string
+    {
+        return random_bytes(12);
+    }
+
     public function generateConfirmationHash(string $confirmation)
     {
         $confirmHash = hash("md5", $confirmation);
