@@ -44,6 +44,12 @@ abstract class ListMessage extends RedisMessage
         return $listModel;
     }
 
+    public function appendUniqueModel(StringMessage $message)
+    {
+        $this->removeModel($message);
+        $this->appendModel($message);
+    }
+
     public function appendModel(StringMessage $message)
     {
         $redis = $this->redisProvider->getRedis();
@@ -52,6 +58,7 @@ abstract class ListMessage extends RedisMessage
             return false;
         }
         $modelData = json_encode($message);
+        $this->containedModels[] = $message;
         return $redis->lPush($fullId, $modelData);
     }
 
@@ -61,5 +68,8 @@ abstract class ListMessage extends RedisMessage
         $fullId = $this->getFullId();
         $modelData = json_encode($message);
         $redis->lRem($fullId, $modelData, 1);
+        if (($key = array_search($message, $this->containedModels)) !== false) {
+            unset($this->containedModels[$key]);
+        }
     }
 }
