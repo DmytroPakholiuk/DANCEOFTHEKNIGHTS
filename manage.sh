@@ -73,6 +73,10 @@ function makeDocker() {
 }
 
 
+function start() {
+    docker-compose up -d
+    docker exec dance_of_the_knights_php /bin/bash -c "php dance watch_prices"
+}
 
 function buildDanceOfTheKnightsPhp() {
     output "Setting up php with composer" info
@@ -80,6 +84,8 @@ function buildDanceOfTheKnightsPhp() {
     docker exec dance_of_the_knights_php /bin/bash -c "composer install --ignore-platform-reqs"
     docker exec dance_of_the_knights_php /bin/bash -c "composer update"
     docker exec dance_of_the_knights_php /bin/bash -c "php vendor/bin/codecept bootstrap"
+
+    docker exec dance_of_the_knights_php /bin/bash -c "php dance watch_prices"
 
     output "Setup successful" success
 }
@@ -107,7 +113,6 @@ function fullInstall() {
         return
     fi
     buildDanceOfTheKnightsPhp
-#    initialiseApi
     checkHosts
 }
 

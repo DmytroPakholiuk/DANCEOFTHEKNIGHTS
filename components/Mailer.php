@@ -37,6 +37,27 @@ class Mailer
         return $this->mailer->send();
     }
 
+    public function reset(): self
+    {
+        $this->mailer->clearAllRecipients();
+        $this->mailer->Subject = "";
+        $this->mailer->Body = "";
+
+        return $this;
+    }
+
+    public function setMultipleReceivers(array $receivers)
+    {
+        if (empty($receivers)){
+            return;
+        }
+        $this->mailer->addAddress($receivers[0]);
+        unset($receivers[0]);
+        foreach ($receivers as $receiver){
+            $this->mailer->addBCC($receiver);
+        }
+    }
+
     public function render(string $viewName, array $params = []): string
     {
         extract($params, EXTR_OVERWRITE);
