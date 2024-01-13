@@ -37,6 +37,7 @@ class OlxDomParser
         if(curl_getinfo($curlHandle,  CURLINFO_RESPONSE_CODE) === 404
             || curl_error($curlHandle)) {
             throw new NotFoundException("The link that you sent was not valid");
+//            throw new NotFoundException("The link that you sent was not valid");
         }
         curl_close($curlHandle);
     }

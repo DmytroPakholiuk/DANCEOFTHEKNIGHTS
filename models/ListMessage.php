@@ -11,7 +11,7 @@ abstract class ListMessage extends RedisMessage
      * contains all models that are inside that list
      * @var StringMessage[]
      */
-    public array $containedModels;
+    public array $containedModels = [];
 
     /**
      * returns a ListMessage model of the class that was called in.

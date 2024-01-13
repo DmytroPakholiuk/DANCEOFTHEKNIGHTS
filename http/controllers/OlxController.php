@@ -14,6 +14,9 @@ class OlxController extends Controller
 {
     public function actionTest()
     {
+        GoodsItem::getAllModels();
+
+        die();
         $parser = new OlxDomParser();
         $item = new GoodsItem();
         $item->id = "https://www.olx.ua/d/uk/obyavlenie/lenovo-20v-4-5a-90w-usb-pin-originalnyy-blok-pitaniya-dlya-noutbuka-IDU3qhK.html";

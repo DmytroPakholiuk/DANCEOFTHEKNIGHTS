@@ -34,6 +34,23 @@ abstract class StringMessage extends RedisMessage
     }
 
     /**
+     * Generates models one-by-one, so you have to use it in foreach() loop.
+     * This way it takes a lot less RAM than if we were to fetch it with foreach and return in array
+     * @throws \ReflectionException
+     * @throws \RedisException
+     */
+    public static function getAllModels(): \Generator
+    {
+        $redis = RedisProvider::getInstance()->getRedis();
+        $allKeys = $redis->scan($iterator, static::prefix() . "*");
+
+        foreach ($allKeys as $key){
+            $searchKey = substr($key, strlen(static::prefix()));
+            yield static::getModel($searchKey);
+        }
+    }
+
+    /**
      * @throws \ReflectionException
      * @throws \RedisException
      */
