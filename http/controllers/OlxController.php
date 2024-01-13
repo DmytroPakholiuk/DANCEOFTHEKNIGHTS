@@ -4,20 +4,23 @@ namespace http\controllers;
 
 use components\Config;
 use components\Mailer;
+use components\OlxDomParser;
 use exceptions\NotFoundException;
 use models\Email;
 use models\EmailsForItem;
+use models\GoodsItem;
 
 class OlxController extends Controller
 {
     public function actionTest()
     {
-//        $mailer = new Mailer();
-//        var_dump($mailer->render("testMail"));
-//        $mailer->setReceiver("dmytro0pakhoilluk@gmail.com")
-//            ->setSubject("Test Mail Lol")
-//            ->setMessage($mailer->render("testMail"));
-//        var_dump($mailer->sendMail());
+        $parser = new OlxDomParser();
+        $item = new GoodsItem();
+        $item->id = "https://www.olx.ua/d/uk/obyavlenie/lenovo-20v-4-5a-90w-usb-pin-originalnyy-blok-pitaniya-dlya-noutbuka-IDU3qhK.html";
+        $parser->populateGoodsItem($item);
+        var_dump($item);
+
+        die();
         $model = new Email();
         $model->active = false;
         $model->id = "dmytro0pakhoilluk@gmail.com";
@@ -40,8 +43,40 @@ class OlxController extends Controller
     public function actionSubscribe()
     {
         if ($_SERVER['REQUEST_METHOD'] === "POST"){
-            var_dump($_POST);die();
-            //todo process the form application
+            $email = $_POST["email"];
+            $goodsLink = $_POST["link"];
+
+            $emailModel = Email::getModel($email);
+            if (! $emailModel?->active){
+                $this->redirect("/olx/send-activation-email?email=" . urlencode($email));
+            }
+
+            $goodsModel = GoodsItem::getModel($goodsLink);
+            if ($goodsModel === null){
+                $goodsModel = new GoodsItem();
+                $goodsModel->id = $goodsLink;
+                $parser = new OlxDomParser();
+                $parser->populateGoodsItem($goodsModel);
+                $goodsModel->saveModel();
+            }
+
+            $emailsForGoods = EmailsForItem::getModel($goodsLink);
+            $emailsForGoods->appendUniqueModel($emailModel);
+
+            $mailer = new Mailer();
+            $mailer->setReceiver($email)
+                ->setSubject("Subscription Successful")
+                ->setMessage($mailer->render("subscriptionSuccessful", [
+                    "goodsModel" => $goodsModel,
+                    "emailModel" => $emailModel
+                ]))
+                ->sendMail();
+
+            $this->render("subscriptionSuccessful", [
+                "goodsModel" => $goodsModel,
+                "emailModel" => $emailModel
+            ]);
+
         } elseif ($_SERVER['REQUEST_METHOD'] === "GET"){
             $this->render("subscriptionForm");
         }
