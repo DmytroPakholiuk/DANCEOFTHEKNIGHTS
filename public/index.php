@@ -1,8 +1,5 @@
 <?php
 
-/**
- * Autoloader, since I am not allowed to use Composer Autoloader
- */
 spl_autoload_register(function($className)
 {
     $namespace = str_replace("\\","/",__NAMESPACE__);
@@ -11,8 +8,7 @@ spl_autoload_register(function($className)
     require_once($class);
 });
 
-//require __DIR__ . '/../vendor/autoload.php';
-
+require __DIR__ . '/../vendor/autoload.php';
 
 $app = new \http\Application();
 $app->run();

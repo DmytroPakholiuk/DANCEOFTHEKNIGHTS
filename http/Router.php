@@ -9,11 +9,13 @@ use utils\UriNameHelper;
 class Router
 {
     protected string $uri;
+    protected string $path;
     protected string $defaultController = "site";
     protected Controller $controller;
     public function __construct()
     {
         $this->uri = $_SERVER["REQUEST_URI"];
+        $this->path = strtok($_SERVER["REQUEST_URI"], '?');;
     }
 
     /**
@@ -28,7 +30,7 @@ class Router
         try {
             $this->controller = $this->generateController();
             $this->triggerAction();
-        } catch (\Throwable $exception) {
+        } catch (NotFoundException $exception) {
             echo "404";
         }
     }
@@ -56,7 +58,7 @@ class Router
      */
     private function getControllerId(): string
     {
-        $uriArray = explode("/", $this->uri);
+        $uriArray = explode("/", $this->path);
 
         return !empty($uriArray[1]) ? $uriArray[1] : $this->defaultController;
     }
@@ -78,7 +80,7 @@ class Router
      */
     private function getActionId(): string
     {
-        $uriArray = explode("/", $this->uri);
+        $uriArray = explode("/", $this->path);
 
         return !empty($uriArray[2]) ? $uriArray[2] : $this->controller->defaultAction();
     }
