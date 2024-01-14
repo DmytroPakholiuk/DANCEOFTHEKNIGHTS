@@ -33,6 +33,8 @@ services:
     networks:
       dance_of_the_knights_network:
         ipv4_address: 175.10.20.4
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
 
   redis:
     container_name: dance_of_the_knights_redis
