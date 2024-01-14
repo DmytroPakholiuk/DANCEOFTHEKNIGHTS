@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" bootstrap="./tests/_bootstrap.php" xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/10.5/phpunit.xsd" cacheDirectory=".phpunit.cache">
+  <source>
+    <include>
+      <directory>components</directory>
+      <directory>http</directory>
+      <directory>models</directory>
+      <directory>utils</directory>
+    </include>
+
+    <exclude>
+      <file>components/CurlWrapper.php</file>
+    </exclude>
+  </source>
+</phpunit>

@@ -4,10 +4,15 @@ namespace http;
 
 class Application
 {
+    protected Router $router;
 
     public function run()
     {
-        $router = new Router();
-        $router->executeAction();
+        $this->router->executeAction();
+    }
+
+    public function __construct()
+    {
+        $this->router = new Router();
     }
 }

@@ -6,6 +6,6 @@ class SiteController extends Controller
 {
     public function actionIndex()
     {
-        echo "site index lol";
+        $this->render("index");
     }
 }

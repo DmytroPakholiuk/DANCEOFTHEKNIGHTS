@@ -30,7 +30,7 @@ class Router
         try {
             $this->controller = $this->generateController();
             $this->triggerAction();
-        } catch (NotFoundException $exception) {
+        } catch (\Exception $exception) {
             echo "404";
         }
     }
@@ -47,7 +47,7 @@ class Router
             $controller = (new \ReflectionClass($fullClassName))->newInstance();
 
             return $controller;
-        } catch (\ReflectionException) {
+        } catch (\Throwable) {
             throw new NotFoundException();
         }
     }

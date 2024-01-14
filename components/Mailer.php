@@ -20,16 +20,31 @@ class Mailer
         throw new \Exception("The email you tried to set was incorrect");
     }
 
+    public function getReceivers()
+    {
+        return $this->mailer->getAllRecipientAddresses();
+    }
+
     public function setSubject(string $subject): self
     {
         $this->mailer->Subject = $subject;
         return $this;
     }
 
+    public function getSubject(): string
+    {
+        return $this->mailer->Subject;
+    }
+
     public function setMessage(string $content): self
     {
         $this->mailer->Body = $content;
         return $this;
+    }
+
+    public function getMessage(): string
+    {
+        return $this->mailer->Body;
     }
 
     public function sendMail(): bool

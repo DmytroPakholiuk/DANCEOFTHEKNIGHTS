@@ -62,7 +62,6 @@ abstract class StringMessage extends RedisMessage
         $modelDataStdClass = json_decode($modelDataJson);
         if (empty($modelDataStdClass)){
             return null;
-            throw new NotFoundException("This model was not found in database");
         }
 
         $model = (new \ReflectionClass($modelDataStdClass->class))->newInstance();

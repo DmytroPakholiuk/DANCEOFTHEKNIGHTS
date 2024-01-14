@@ -11,6 +11,7 @@ class OlxDomParser
     public string $url;
     public GoodsItem $goodsItem;
     public string $page;
+    public CurlWrapper $curlWrapper;
 
     /**
      *
@@ -19,7 +20,7 @@ class OlxDomParser
      */
     public function populateGoodsItem(GoodsItem $item): GoodsItem
     {
-        if (!isset($item->id)){
+        if (empty($item->id)){
             return $item;
         }
         $this->downloadPage($item->id);
@@ -29,17 +30,18 @@ class OlxDomParser
     }
     public function downloadPage($url)
     {
-        $curlHandle = curl_init($url);
-        curl_setopt($curlHandle, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($curlHandle, CURLOPT_HEADER, 0);
-
-        $this->page = curl_exec($curlHandle);
-        if(curl_getinfo($curlHandle,  CURLINFO_RESPONSE_CODE) === 404
-            || curl_error($curlHandle)) {
-            throw new NotFoundException("The link that you sent was not valid");
+        $this->page = $this->curlWrapper->getPage($url);
+//        $curlHandle = curl_init($url);
+//        curl_setopt($curlHandle, CURLOPT_RETURNTRANSFER, true);
+//        curl_setopt($curlHandle, CURLOPT_HEADER, 0);
+//
+//        $this->page = curl_exec($curlHandle);
+//        if(curl_getinfo($curlHandle,  CURLINFO_RESPONSE_CODE) === 404
+//            || curl_error($curlHandle)) {
 //            throw new NotFoundException("The link that you sent was not valid");
-        }
-        curl_close($curlHandle);
+////            throw new NotFoundException("The link that you sent was not valid");
+//        }
+//        curl_close($curlHandle);
     }
 
     public function getPrice(): ?string
@@ -54,5 +56,10 @@ class OlxDomParser
         $matches = [];
         preg_match("/data-cy=\"ad_title\".*?>.*?<h4.*?>(.*?)<\/h4>/", $this->page, $matches);
         return $matches[1] ?? "";
+    }
+
+    public function __construct()
+    {
+        $this->curlWrapper = new CurlWrapper();
     }
 }

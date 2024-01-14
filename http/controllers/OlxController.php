@@ -12,35 +12,35 @@ use models\GoodsItem;
 
 class OlxController extends Controller
 {
-    public function actionTest()
-    {
-        GoodsItem::getAllModels();
-
-        die();
-        $parser = new OlxDomParser();
-        $item = new GoodsItem();
-        $item->id = "https://www.olx.ua/d/uk/obyavlenie/lenovo-20v-4-5a-90w-usb-pin-originalnyy-blok-pitaniya-dlya-noutbuka-IDU3qhK.html";
-        $parser->populateGoodsItem($item);
-        var_dump($item);
-
-        die();
-        $model = new Email();
-        $model->active = false;
-        $model->id = "dmytro0pakhoilluk@gmail.com";
-        $model->generateConfirmationHash($model->generateConfirmationKey());
-        $model->saveModel();
-        var_dump(Email::getModel("dmytro0pakholiuk@gmail.com"));
-
-        $list = new EmailsForItem();
-        $list->id = "goods1";
-        $list->appendModel($model);
-
-        var_dump(EmailsForItem::getModel("goods1"));
-    }
+//    public function actionTest()
+//    {
+//        GoodsItem::getAllModels();
+//
+//        die();
+//        $parser = new OlxDomParser();
+//        $item = new GoodsItem();
+//        $item->id = "https://www.olx.ua/d/uk/obyavlenie/lenovo-20v-4-5a-90w-usb-pin-originalnyy-blok-pitaniya-dlya-noutbuka-IDU3qhK.html";
+//        $parser->populateGoodsItem($item);
+//        var_dump($item);
+//
+//        die();
+//        $model = new Email();
+//        $model->active = false;
+//        $model->id = "dmytro0pakhoilluk@gmail.com";
+//        $model->generateConfirmationHash($model->generateConfirmationKey());
+//        $model->saveModel();
+//        var_dump(Email::getModel("dmytro0pakholiuk@gmail.com"));
+//
+//        $list = new EmailsForItem();
+//        $list->id = "goods1";
+//        $list->appendModel($model);
+//
+//        var_dump(EmailsForItem::getModel("goods1"));
+//    }
 
     public function actionIndex()
     {
-        echo "index";
+        $this->redirect("/olx/subscribe");
     }
 
     public function actionSubscribe()
@@ -51,7 +51,7 @@ class OlxController extends Controller
 
             $emailModel = Email::getModel($email);
             if (! $emailModel?->active){
-                $this->redirect("/olx/send-activation-email?email=" . urlencode($email));
+                $this->redirect("/olx/send-activation-email?email=" . urlencode($email)); die();
             }
 
             $goodsModel = GoodsItem::getModel($goodsLink);
@@ -88,7 +88,7 @@ class OlxController extends Controller
     public function actionSendActivationEmail()
     {
         if (!isset($_GET["email"])){
-            $this->redirect("/olx/index");
+            $this->redirect("/olx/index"); die();
         }
         $email = $_GET["email"];
         $appUrl = Config::getConfigArray("main")["base_url"];

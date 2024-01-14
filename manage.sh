@@ -93,7 +93,7 @@ function buildDanceOfTheKnightsPhp() {
 function runUnits() {
     output "Running units" info
 
-    docker exec dance_of_the_knights_php /bin/bash -c "./vendor/bin/phpunit tests"
+    docker exec dance_of_the_knights_php /bin/bash -c "XDEBUG_MODE=coverage ./vendor/bin/phpunit tests --coverage-text"
 }
 
 function checkHosts() {
