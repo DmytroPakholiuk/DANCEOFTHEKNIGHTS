@@ -7,6 +7,9 @@
       <directory>models</directory>
       <directory>utils</directory>
     </include>
-    <exclude/>
+
+    <exclude>
+      <file>components/CurlWrapper.php</file>
+    </exclude>
   </source>
 </phpunit>

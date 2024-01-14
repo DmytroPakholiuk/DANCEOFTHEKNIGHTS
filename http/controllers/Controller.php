@@ -19,6 +19,5 @@ class Controller
     public function redirect(string $url, $status = 303)
     {
         header('Location: ' . $url, true, $status);
-        die();
     }
 }
