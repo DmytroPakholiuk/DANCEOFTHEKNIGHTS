@@ -57,4 +57,9 @@ class OlxDomParser
         preg_match("/data-cy=\"ad_title\".*?>.*?<h4.*?>(.*?)<\/h4>/", $this->page, $matches);
         return $matches[1] ?? "";
     }
+
+    public function __construct()
+    {
+        $this->curlWrapper = new CurlWrapper();
+    }
 }
