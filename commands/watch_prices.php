@@ -31,6 +31,8 @@ while (true){
                     $receivers[] = $email->id;
                 }
 
+                $newGoodsModel->saveModel();
+
                 $mailer->setMultipleReceivers($receivers);
                 $mailer->setSubject("The advert you subscribed on has changed its price");
                 $mailer->setMessage($mailer->render("priceChanged", [
